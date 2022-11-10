@@ -14,24 +14,27 @@ int leftMotor, rightMotor;
 int pos;
 double double_x, double_y, speed, motor, temp, temp1;
 
+// Map Func
 long BtAnalogStick::mapping(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+// BtCar Control
 int BtAnalogStick::move(int x, int y){
     double_x = double(x - 512);
     double_y = double(y - 512);
-
+    
+    // Calculate position and speed for left right motor using (Polar coordinate system) method
     temp1 = atan2 (double_y, double_x) * 180 / PI;
     pos = int(temp1);
-
-    if(double_y < 0) pos += 360;
-    if(double_x == 0 && double_y == 0) pos = 0;
 
     temp = sqrt(pow(double_x, 2) + pow(double_y, 2));
     speed = mapping(temp, 0, 512, 0, 100);
 
-    
+    if(double_y < 0) pos += 360;
+    if(double_x == 0 && double_y == 0) pos = 0;
+
+    // Setting left right motor for analogWrite
     if(pos == 90){
         leftMotor = int((speed/100) * 255);
         rightMotor = int((speed/100) * 255);
@@ -72,16 +75,12 @@ int BtAnalogStick::move(int x, int y){
         rightMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
     }
     
-
-    Serial.print(leftMotor);
-    Serial.print(" , ");
-    Serial.println(rightMotor);
-
+    // Moving Car
     if(double_y == 0 && double_x == 0){
-        Serial.println("stop");
+        // Serial.println("stop");
     }
     else if(double_y > 0){
-        Serial.println("move foward");
+        // Serial.println("move foward");
         digitalWrite(pinarray[2],LOW);
         analogWrite(pinarray[3],leftMotor);
 
@@ -90,7 +89,7 @@ int BtAnalogStick::move(int x, int y){
         
     }
     else if(double_y < 0){
-        Serial.println("move backward");
+        // Serial.println("move backward");
         digitalWrite(pinarray[3],LOW);
         analogWrite(pinarray[2],leftMotor);
         
@@ -101,8 +100,7 @@ int BtAnalogStick::move(int x, int y){
 
 }
 
-
-
+// Setting up left right motors pin
 int BtAnalogStick::motorpin(int pin1,int pin2,int pin3,int pin4)
 {
 	pinarray[0]=pin1;
