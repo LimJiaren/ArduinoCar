@@ -81,22 +81,22 @@ int BtAnalogStick::move(int x, int y){
     }
     else if(double_y > 0){
         // Serial.println("move foward");
-        analogWrite(enb, leftMotor);
+        analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[2],LOW);
         digitalWrite(pinarray[3],HIGH);
 
-        analogWrite(enb, rightMotor);
+        analogWrite(pinarray[5], rightMotor);
         digitalWrite(pinarray[1],LOW);
         digitalWrite(pinarray[0],HIGH);
         
     }
     else if(double_y < 0){
         // Serial.println("move backward");
-        analogWrite(enb, leftMotor);
+        analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[3],LOW);
         digitalWrite(pinarray[2],HIGH);
 
-        analogWrite(enb, rightMotor);
+        analogWrite(pinarray[5], rightMotor);
         digitalWrite(pinarray[0],LOW);
         digitalWrite(pinarray[1],HIGH);
         
