@@ -6,6 +6,13 @@ byte BTData;
 String Data ;
 int values[2];
 
+int IN1 = 12;
+int IN2 = 14;
+int IN3 = 27;
+int IN4 = 26;
+int ENA = 25;
+int ENB = 33;
+
 BtAnalogStick a1;
 
 BluetoothSerial SerialBT;
@@ -19,6 +26,7 @@ void splitData(String str) {
 
 void setup() {
   Serial.begin(115200);
+  a1.motorpin(IN1,IN2,IN3,IN4,ENA,ENB);
   SerialBT.begin();
   Serial.println("Bluetooth Started! Ready to pair...");
 }
