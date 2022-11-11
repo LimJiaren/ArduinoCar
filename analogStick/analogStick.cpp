@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int pinarray[4];
+int pinarray[6];
 int leftMotor, rightMotor;
 int pos;
 double double_x, double_y, speed, motor, temp, temp1;
@@ -81,33 +81,39 @@ int BtAnalogStick::move(int x, int y){
     }
     else if(double_y > 0){
         // Serial.println("move foward");
+        analogWrite(enb, leftMotor);
         digitalWrite(pinarray[2],LOW);
-        analogWrite(pinarray[3],leftMotor);
+        digitalWrite(pinarray[3],HIGH);
 
+        analogWrite(enb, rightMotor);
         digitalWrite(pinarray[1],LOW);
-         analogWrite(pinarray[0],rightMotor);
+        digitalWrite(pinarray[0],HIGH);
         
     }
     else if(double_y < 0){
         // Serial.println("move backward");
+        analogWrite(enb, leftMotor);
         digitalWrite(pinarray[3],LOW);
-        analogWrite(pinarray[2],leftMotor);
-        
+        digitalWrite(pinarray[2],HIGH);
+
+        analogWrite(enb, rightMotor);
         digitalWrite(pinarray[0],LOW);
-        analogWrite(pinarray[1],rightMotor);
+        digitalWrite(pinarray[1],HIGH);
         
     }
 
 }
 
 // Setting up left right motors pin
-int BtAnalogStick::motorpin(int pin1,int pin2,int pin3,int pin4)
+int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int enb)
 {
 	pinarray[0]=pin1;
 	pinarray[1]=pin2;
 	pinarray[2]=pin3;
 	pinarray[3]=pin4;
-	for(int count=0;count<4;count++)
+	pinarray[4]=ena;
+	pinarray[5]=enb;
+	for(int count=0;count<6;count++)
 	{
 		pinMode(pinarray[count],OUTPUT);
 	}
