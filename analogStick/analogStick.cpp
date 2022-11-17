@@ -29,7 +29,7 @@ int BtAnalogStick::move(int x, int y){
     pos = int(temp1);
 
     temp = sqrt(pow(double_x, 2) + pow(double_y, 2));
-    speed = mapping(temp, 0, 512, 0, 100);
+    speed = mapping(temp, 0, 512, 40, 100);
 
     if(double_y < 0) pos += 360;
     if(double_x == 0 && double_y == 0) pos = 0;
@@ -74,10 +74,16 @@ int BtAnalogStick::move(int x, int y){
         leftMotor = int((speed/100) * 255);
         rightMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
     }
-    
+    Serial.print(leftMotor);
+    Serial.print(",");
+    Serial.println(rightMotor);
+
     // Moving Car
     if(double_y == 0 && double_x == 0){
-        // Serial.println("stop");
+        digitalWrite(pinarray[2],LOW);
+        digitalWrite(pinarray[3],LOW); 
+        digitalWrite(pinarray[1],LOW);
+        digitalWrite(pinarray[0],LOW);
     }
     else if(double_y > 0){
         // Serial.println("move foward");
