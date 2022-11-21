@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int pinarray[6];
+int pinarray[9];
 int leftMotor, rightMotor;
 int pos;
 double double_x, double_y, speed, motor, temp, temp1;
@@ -43,16 +43,19 @@ int BtAnalogStick::move(int x, int y){
         motor = mapping(pos, 91, 179, 0, 255);
         leftMotor = int((speed/100) * (255 - motor));
         rightMotor = int((speed/100) * 255);
+        digitalRead(pinarray[6], HIGH);
     }
 
     if(pos == 180){
         leftMotor = int((speed/100) * 0);
         rightMotor = int((speed/100) * 255);
+        digitalRead(pinarray[6], HIGH);
     }
     if(pos>180 && pos<270){
         motor = mapping(pos, 181, 269, 0, 255);
         leftMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
         rightMotor = int((speed/100) * 255);
+        digitalRead(pinarray[6], HIGH);
     }
     
     if(pos == 270){
@@ -63,20 +66,20 @@ int BtAnalogStick::move(int x, int y){
         motor = mapping(pos, 271, 359, 0, 255);
         leftMotor = int((speed/100) * 255);
         rightMotor = int((speed/100) * (255 - motor));
+        digitalRead(pinarray[7], HIGH);
     }
 
     if(pos == 0 || pos == 360){
         leftMotor = int((speed/100) * 255);
         rightMotor = int((speed/100) * 0);
+        digitalRead(pinarray[7], HIGH);
     }
     if(pos>0 && pos<90){
         motor = mapping(pos, 1, 89, 0, 255);
         leftMotor = int((speed/100) * 255);
         rightMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
+        digitalRead(pinarray[7], HIGH);
     }
-    Serial.print(leftMotor);
-    Serial.print(",");
-    Serial.println(rightMotor);
 
     // Moving Car
     if(double_y == 0 && double_x == 0){
@@ -97,6 +100,7 @@ int BtAnalogStick::move(int x, int y){
         
     }
     else if(double_y < 0){
+        digitalRead(pinarray[8], HIGH);
         // Serial.println("move backward");
         analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[3],LOW);
@@ -111,15 +115,18 @@ int BtAnalogStick::move(int x, int y){
 }
 
 // Setting up left right motors pin
-int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int enb)
+int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int enb, int left_light, int right_light, int back_light)
 {
-	pinarray[0]=pin1;
-	pinarray[1]=pin2;
-	pinarray[2]=pin3;
-	pinarray[3]=pin4;
-	pinarray[4]=ena;
-	pinarray[5]=enb;
-	for(int count=0;count<6;count++)
+	pinarray[0] = pin1;
+	pinarray[1] = pin2;
+	pinarray[2] = pin3;
+	pinarray[3] = pin4;
+	pinarray[4] = ena;
+	pinarray[5] = enb;
+    pinarray[6] = left_light;
+    pinarray[7] = right_light;
+    pinarray[8] = back_light;
+	for(int count=0;count<9;count++)
 	{
 		pinMode(pinarray[count],OUTPUT);
 	}
