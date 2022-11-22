@@ -24,12 +24,12 @@ void setup() {
 }
 
 void loop() {
-
   if (SerialBT.available()){
     char character = SerialBT.read();
     Data.concat(character);
     if (character == '\n') {
       splitData(Data);
+
       a1.move(values[0] , values[1]);
       Data = "";
     }
