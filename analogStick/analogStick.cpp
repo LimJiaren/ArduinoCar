@@ -43,19 +43,22 @@ int BtAnalogStick::move(int x, int y){
         motor = mapping(pos, 91, 179, 0, 255);
         leftMotor = int((speed/100) * (255 - motor));
         rightMotor = int((speed/100) * 255);
-        digitalRead(pinarray[6], HIGH);
+        digitalWrite(pinarray[6], HIGH);
+        digitalWrite(pinarray[7], LOW);
     }
 
     if(pos == 180){
         leftMotor = int((speed/100) * 0);
         rightMotor = int((speed/100) * 255);
-        digitalRead(pinarray[6], HIGH);
+        digitalWrite(pinarray[6], HIGH);
+        digitalWrite(pinarray[7], LOW);
     }
     if(pos>180 && pos<270){
         motor = mapping(pos, 181, 269, 0, 255);
         leftMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
         rightMotor = int((speed/100) * 255);
-        digitalRead(pinarray[6], HIGH);
+        digitalWrite(pinarray[6], HIGH);
+        digitalWrite(pinarray[7], LOW);
     }
     
     if(pos == 270){
@@ -66,19 +69,22 @@ int BtAnalogStick::move(int x, int y){
         motor = mapping(pos, 271, 359, 0, 255);
         leftMotor = int((speed/100) * 255);
         rightMotor = int((speed/100) * (255 - motor));
-        digitalRead(pinarray[7], HIGH);
+        digitalWrite(pinarray[7], HIGH);
+        digitalWrite(pinarray[6], LOW);
     }
 
     if(pos == 0 || pos == 360){
         leftMotor = int((speed/100) * 255);
         rightMotor = int((speed/100) * 0);
-        digitalRead(pinarray[7], HIGH);
+        digitalWrite(pinarray[7], HIGH);
+        digitalWrite(pinarray[6], LOW);
     }
     if(pos>0 && pos<90){
         motor = mapping(pos, 1, 89, 0, 255);
         leftMotor = int((speed/100) * 255);
         rightMotor = int(floor(255 * (speed/100))-((speed/100) * (255 - motor)));
-        digitalRead(pinarray[7], HIGH);
+        digitalWrite(pinarray[7], HIGH);
+        digitalWrite(pinarray[6], LOW);
     }
 
     // Moving Car
@@ -87,8 +93,13 @@ int BtAnalogStick::move(int x, int y){
         digitalWrite(pinarray[3],LOW); 
         digitalWrite(pinarray[1],LOW);
         digitalWrite(pinarray[0],LOW);
+        digitalWrite(pinarray[6], LOW);
+        digitalWrite(pinarray[7], LOW);
+        digitalWrite(pinarray[8], LOW);
+        
     }
     else if(double_y > 0){
+        digitalWrite(pinarray[8], LOW);
         // Serial.println("move foward");
         analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[2],LOW);
@@ -100,7 +111,7 @@ int BtAnalogStick::move(int x, int y){
         
     }
     else if(double_y < 0){
-        digitalRead(pinarray[8], HIGH);
+        digitalWrite(pinarray[8], HIGH);
         // Serial.println("move backward");
         analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[3],LOW);

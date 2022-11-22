@@ -12,6 +12,9 @@ int IN3 = 27;
 int IN4 = 26;
 int ENA = 25;
 int ENB = 33;
+int left_light = 2;
+int right_light = 4;
+int back_light = 5;
 
 BtAnalogStick car;
 
@@ -26,14 +29,14 @@ void splitData(String str) {
 
 void setup() {
   Serial.begin(115200);
-  a1.motorpin(IN1,IN2,IN3,IN4,ENA,ENB);
+  car.motorpin(IN1, IN2, IN3, IN4, ENA, ENB, left_light, right_light, back_light);
   SerialBT.begin("AnalogBtCar");
   Serial.println("Bluetooth Started! Ready to pair...");
 }
 
 void loop() {
 
-  if (SerialBT.available()){
+  if (SerialBT.available()) {
     char character = SerialBT.read();
     Data.concat(character);
     if (character == '\n') {
