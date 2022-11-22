@@ -9,10 +9,14 @@
 
 using namespace std;
 
-int pinarray[9];
-int leftMotor, rightMotor;
+int pinarray[10];
+int leftMotor, rightMotor, trigpin, echopin;
 int pos;
+int echo=0, trig=0;
+
 double double_x, double_y, speed, motor, temp, temp1;
+long duration;
+float ultraSonicDistance;
 
 // Map Func
 long BtAnalogStick::mapping(long x, long in_min, long in_max, long out_min, long out_max) {
@@ -100,19 +104,25 @@ int BtAnalogStick::move(int x, int y){
     }
     else if(double_y > 0){
         digitalWrite(pinarray[8], LOW);
-        // Serial.println("move foward");
-        analogWrite(pinarray[4], leftMotor);
-        digitalWrite(pinarray[2],LOW);
-        digitalWrite(pinarray[3],HIGH);
+        range();
+        if(ultraSonicDistance <= 5){
+            digitalWrite(pinarray[9], HIGH);
+            Serial.println("!Danger!");
+        }
+        else{
+            digitalWrite(pinarray[9], LOW);
 
-        analogWrite(pinarray[5], rightMotor);
-        digitalWrite(pinarray[1],LOW);
-        digitalWrite(pinarray[0],HIGH);
-        
+            analogWrite(pinarray[4], leftMotor);
+            digitalWrite(pinarray[2],LOW);
+            digitalWrite(pinarray[3],HIGH);
+
+            analogWrite(pinarray[5], rightMotor);
+            digitalWrite(pinarray[1],LOW);
+            digitalWrite(pinarray[0],HIGH);
+        }
     }
     else if(double_y < 0){
         digitalWrite(pinarray[8], HIGH);
-        // Serial.println("move backward");
         analogWrite(pinarray[4], leftMotor);
         digitalWrite(pinarray[3],LOW);
         digitalWrite(pinarray[2],HIGH);
@@ -126,7 +136,7 @@ int BtAnalogStick::move(int x, int y){
 }
 
 // Setting up left right motors pin
-int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int enb, int left_light, int right_light, int back_light)
+int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int enb, int left_light, int right_light, int back_light, int buzzer)
 {
 	pinarray[0] = pin1;
 	pinarray[1] = pin2;
@@ -137,8 +147,30 @@ int BtAnalogStick::motorpin(int pin1, int pin2, int pin3, int pin4, int ena, int
     pinarray[6] = left_light;
     pinarray[7] = right_light;
     pinarray[8] = back_light;
-	for(int count=0;count<9;count++)
+    pinarray[9] = buzzer;
+	for(int count=0;count<10;count++)
 	{
 		pinMode(pinarray[count],OUTPUT);
 	}
+}
+
+void BtAnalogStick::range(){
+	digitalWrite(trigpin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigpin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigpin, LOW);
+    duration = pulseIn (echopin, HIGH);
+    // Serial.println(duration);
+    ultraSonicDistance = duration * 0.034 / 2;
+    Serial.println(ultraSonicDistance);
+    
+}
+
+int BtAnalogStick::UltraSonicPin(int trig,int echo)
+{
+	trigpin=trig;
+	echopin=echo;
+	pinMode(trig,OUTPUT);
+	pinMode(echo,INPUT);
 }
