@@ -34,7 +34,7 @@ int BtAnalogStick::move(int x, int y){
 
     if(double_y < 0) pos += 360;
     if(double_x == 0 && double_y == 0) pos = 0;
-
+    digitalWrite(pinarray[9], LOW);
     // Setting left right motor for analogWrite
     if(pos == 90){
         leftMotor = int((speed/100) * 255);
@@ -118,6 +118,7 @@ int BtAnalogStick::move(int x, int y){
         }
     }
     else if(double_y < 0){
+        
         digitalWrite(pinarray[8], HIGH);
 
         analogWrite(pinarray[2], leftMotor);
