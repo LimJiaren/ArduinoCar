@@ -1,6 +1,5 @@
 #ifndef analogStick
 #define analogStick
-#include <iostream>
 #include <string>
 #include "string.h"
 
