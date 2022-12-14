@@ -34,7 +34,7 @@ int BtAnalogStick::move(int x, int y){
 
     if(double_y < 0) pos += 360;
     if(double_x == 0 && double_y == 0) pos = 0;
-    digitalWrite(pinarray[9], LOW);
+
     // Setting left right motor for analogWrite
     if(pos == 90){
         leftMotor = int((speed/100) * 255);
@@ -90,6 +90,7 @@ int BtAnalogStick::move(int x, int y){
 
     // Moving Car
     if(double_y == 0 && double_x == 0){
+        digitalWrite(pinarray[9], LOW);
         digitalWrite(pinarray[2],LOW);
         digitalWrite(pinarray[3],LOW); 
         digitalWrite(pinarray[1],LOW);
@@ -100,13 +101,13 @@ int BtAnalogStick::move(int x, int y){
         
     }
     else if(double_y > 0){
-        digitalWrite(pinarray[8], LOW);
         range();
         if(ultraSonicDistance <= 5){
             digitalWrite(pinarray[9], HIGH);
             Serial.println("!Danger!");
         }  
         else{
+            digitalWrite(pinarray[8], LOW);
             digitalWrite(pinarray[9], LOW);
 
             digitalWrite(pinarray[2],LOW);
