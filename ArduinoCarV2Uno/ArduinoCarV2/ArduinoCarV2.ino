@@ -1,8 +1,8 @@
 #include <analogStick.h>
-#include <SoftwareSerial.h> //include SoftwareSerial Library
-SoftwareSerial BT(11, 12); //TX, RX
+#include <SoftwareSerial.h>  //include SoftwareSerial Library
+SoftwareSerial BT(11, 12);   //TX, RX
 byte BTData;
-String Data ;
+String Data;
 int values[2];
 
 int IN1 = 3;
@@ -24,27 +24,49 @@ void splitData(String str) {
 
   values[0] = (str.substring(0, index)).toInt();
   values[1] = (str.substring(index + 1)).toInt();
+  if (values[0] < 0 || values[0] > 1024) {
+    values[0] = 512;
+  }
+  if (values[1] < 0 || values[1] > 1024) {
+    values[1] = 512;
+  }
+//   Serial.print("value 1: ");
+//   Serial.print(values[0]);
+//   Serial.print(" values 2: ");
+//   Serial.println(values[1]);
 }
 
 void setup() {
   Serial.begin(9600);
   Serial.println("BT is ready!");
   BT.begin(9600);
-  
+
   car.motorpin(IN1, IN2, IN3, IN4, ENA, ENB, left_light, right_light, back_light, buzzer);
   car.UltraSonicPin(trig_pin, echo_pin);
   Serial.println("Bluetooth Started! Ready to pair...");
-  
 }
 
 void loop() {
-  if (BT.available()> 0) {
+  if (BT.available() > 0) {
     char character = BT.read();
     Data.concat(character);
     if (character == '\n') {
       splitData(Data);
-      car.move(values[0] , values[1]);
-      Data = "";
+      if (values[1] > 512) {
+        car.range();
+        Serial.println(car.getDistance());
+        if (car.getDistance() > 5) {
+          Serial.println("move");
+          car.move(values[0], values[1]);
+        } else {
+          Serial.println("stop");
+          car.move(512, 512);
+          Data = "";
+        }
+      } else {
+        car.move(values[0], values[1]);
+        Data = "";
+      }
     }
   }
 }
