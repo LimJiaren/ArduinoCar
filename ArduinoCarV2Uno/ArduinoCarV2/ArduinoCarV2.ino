@@ -54,12 +54,9 @@ void loop() {
       splitData(Data);
       if (values[1] > 512) {
         car.range();
-        Serial.println(car.getDistance());
         if (car.getDistance() > 5) {
-          Serial.println("move");
           car.move(values[0], values[1]);
         } else {
-          Serial.println("stop");
           car.move(512, 512);
           Data = "";
         }
