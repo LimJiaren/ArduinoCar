@@ -17,6 +17,8 @@ int back_light = 2;
 int trig_pin = 10;
 int echo_pin = 8;
 int buzzer = A0;
+unsigned long long previousTime1 = 0;
+bool buzzerBool = false;
 
 BtAnalogStick car;
 void splitData(String str) {
@@ -32,8 +34,8 @@ void splitData(String str) {
   }
 //   Serial.print("value 1: ");
 //   Serial.print(values[0]);
-//   Serial.print(" values 2: ");
-//   Serial.println(values[1]);
+  // Serial.print(" values 2: ");
+  // Serial.println(values[1]);
 }
 
 void setup() {
@@ -43,6 +45,7 @@ void setup() {
 
   car.motorpin(IN1, IN2, IN3, IN4, ENA, ENB, left_light, right_light, back_light, buzzer);
   car.UltraSonicPin(trig_pin, echo_pin);
+  previousTime1 = millis();
   Serial.println("Bluetooth Started! Ready to pair...");
 }
 
@@ -57,6 +60,7 @@ void loop() {
         if (car.getDistance() > 5) {
           car.move(values[0], values[1]);
         } else {
+          buzzerBool = true;
           car.move(512, 512);
           Data = "";
         }
@@ -65,5 +69,12 @@ void loop() {
         Data = "";
       }
     }
+  }
+  if (buzzerBool){
+    if(millis() - previousTime1 >= 100){
+      previousTime1 = millis();
+      buzzerBool = false;
+    }
+    analogWrite(buzzer, 255);
   }
 }
